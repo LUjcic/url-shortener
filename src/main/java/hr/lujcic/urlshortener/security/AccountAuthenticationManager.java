@@ -4,6 +4,7 @@ import hr.lujcic.urlshortener.exceptions.AccountNotFoundException;
 import hr.lujcic.urlshortener.model.Account;
 import hr.lujcic.urlshortener.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,7 +46,7 @@ public class AccountAuthenticationManager implements AuthenticationManager {
         try {
             account = accountService.getByUsername(username);
         } catch (AccountNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new AuthenticationCredentialsNotFoundException(username);
         }
         SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority("USER");
         Set<GrantedAuthority> authorities = new HashSet<>();
